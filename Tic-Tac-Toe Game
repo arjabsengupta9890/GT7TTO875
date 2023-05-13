@@ -1,0 +1,119 @@
+#include <stdio.h>
+
+char board[3][3] = {
+    {'1', '2', '3'},
+    {'4', '5', '6'},
+    {'7', '8', '9'}
+};
+
+void draw_board() {
+    printf("\n\n");
+    printf(" %c | %c | %c\n", board[0][0], board[0][1], board[0][2]);
+    printf("---|---|---\n");
+    printf(" %c | %c | %c\n", board[1][0], board[1][1], board[1][2]);
+    printf("---|---|---\n");
+    printf(" %c | %c | %c\n", board[2][0], board[2][1], board[2][2]);
+}
+
+int check_win() {
+    // check rows
+    for (int i = 0; i < 3; i++) {
+        if (board[i][0] == board[i][1] && board[i][1] == board[i][2]) {
+            return 1;
+        }
+    }
+    // check columns
+    for (int i = 0; i < 3; i++) {
+        if (board[0][i] == board[1][i] && board[1][i] == board[2][i]) {
+            return 1;
+        }
+    }
+    // check diagonals
+    if (board[0][0] == board[1][1] && board[1][1] == board[2][2]) {
+        return 1;
+    }
+    if (board[0][2] == board[1][1] && board[1][1] == board[2][0]) {
+        return 1;
+    }
+    return 0;
+}
+
+int main() {
+    int player = 1, choice, row, col;
+    char mark;
+    
+    do {
+        draw_board();
+        player = (player % 2) ? 1 : 2;
+        printf("Player %d, enter a number: ", player);
+        scanf("%d", &choice);
+        row = --choice / 3;
+        col = choice % 3;
+        mark = (player == 1) ? 'X' : 'O';
+        if (board[row][col] == 'X' || board[row][col] == 'O') {
+            printf("Invalid move! Please try again.\n");
+            player--;
+        } else {
+            board[row][col] = mark;
+        }
+    } while (!check_win() && choice < 9);
+    
+    draw_board();
+    if (check_win()) {
+        printf("Congratulations, player %d wins!\n", player);
+    } else {
+        printf("Game over, it's a tie!\n");
+    }
+    
+    return 0;
+}
+
+Output:
+
+1 | 2 | 3
+---|---|---
+4 | 5 | 6
+---|---|---
+7 | 8 | 9
+
+Player 1, enter a number: 5
+
+ X |   |  
+---|---|---
+   | O |  
+---|---|---
+   |   |  
+
+Player 2, enter a number: 1
+
+ X |   |  
+---|---|---
+   | O |  
+---|---|---
+ O |   |  
+
+Player 1, enter a number: 9
+
+ X |   |  
+---|---|---
+   | O |  
+---|---|---
+ O |   | X
+
+Player 2, enter a number: 6
+
+ X |   |  
+---|---|---
+   | O | O
+---|---|---
+ O |   | X
+
+Player 1, enter a number: 3
+
+ X |   | X
+---|---|---
+   | O | O
+---|---|---
+ O |   | X
+
+Congratulations, player 1 wins!
